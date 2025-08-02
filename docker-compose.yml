@@ -1,21 +1,15 @@
-# docker-compose.yml
-version: '3'
-
+version: '3.8'
 services:
-  node-exporter:
-    image: prom/node-exporter
-    network_mode: "host"
-    pid: "host"
-    volumes:
-      - "/:/host:ro,rslave"
-    command:
-      - '--path.rootfs=/host'
-    restart: always
-
   prometheus:
-    image: prom/prometheus
-    ports:
-      - "9090:9090"
+    image: prom/prometheus:latest
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    restart: always
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
